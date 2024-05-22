@@ -1,6 +1,20 @@
 import csv
 import matplotlib.pyplot as plt
 
+def quick_sort(array):
+    if len(array)> 1:
+        pivot=array.pop()
+        grtr_lst, equal_lst, smlr_lst = [], [pivot], []
+        for item in array:
+            if item[-1] == pivot[-1]:
+                equal_lst.append(item)
+            elif item[-1] < pivot[-1]:
+                grtr_lst.append(item)
+            else:
+                smlr_lst.append(item)
+        return (quick_sort(smlr_lst) + equal_lst + quick_sort(grtr_lst))
+    else:
+        return array
 
 class Node:
     def __init__(self, key, value):
@@ -85,6 +99,7 @@ max_profit = [0, '']
 most_popular = [[0, '']]
 arr = []
 labels_arr = []
+arr1 = []
 for i in ht.cell:
     while i:
         profit = 0
@@ -103,6 +118,21 @@ for i in ht.cell:
             most_popular.append([quantity, i.key])
         earnings += profit
         i = i.next
+
+for i in ht.cell:
+    while i:
+        profit = 0
+        quantity = 0
+        for j in i.value:
+            profit += j[-1]
+            quantity += j[-3]
+        arr1.append([i.key, quantity, profit, round(((profit * 100) / earnings), 2)])
+        i = i.next
+
+arr1 = list(quick_sort(arr1))
+for i in arr1:
+    print("Товар", i[0], "продался", i[1], "раз на сумму", i[2], "что составило", str(i[3]) + '%')
+
 print("Общая выручка составила:", earnings)
 print("Самый прибыльный товар", str(max_profit[1]) + '.')
 print("С продаж", max_profit[1], "выручка составила", max_profit[0], "рублей.")
